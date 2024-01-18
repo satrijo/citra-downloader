@@ -9,6 +9,8 @@ const getImage = (type, url, folder = null) => {
     .then((res) => {
       const imgBuffer = Buffer.from(res.data, "binary");
       if (folder) {
+        let date = new Date()
+        console.log('Sukses download Himawari ' + type + ' at ' + date)
         fs.writeFile(
           `${folder}/${type}`,
           imgBuffer,
@@ -18,7 +20,7 @@ const getImage = (type, url, folder = null) => {
             }
           }
         );
-      } 
+      }
     })
     .catch((error) => {
       console.error(error);
