@@ -49,8 +49,8 @@ const saveRaobFile = (utc) => {
 };
 
 const scheduleRaobJobs = () => {
-  cron.schedule("45 9 * * *", () => saveRaobFile(0)); // 00 UTC
-  cron.schedule("45 21 * * *", () => saveRaobFile(12)); // 12 UTC
+  cron.schedule("30 2 * * *", () => saveRaobFile(0)); // 00 UTC
+  cron.schedule("30 14 * * *", () => saveRaobFile(12)); // 12 UTC
   cron.schedule("*/10 * * * *", () => {
     let randomText = Math.random().toString(36).substring(7);
     const {date, year, month, day } = getDynamicTimeComponents();
