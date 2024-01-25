@@ -5,6 +5,8 @@ import fs from "fs";
 import checkFolder from "./checkFolder.js";
 import getImage from "./getImage.js";
 
+// test
+
 const app = express();
 const PORT = 3000;
 
@@ -24,20 +26,20 @@ const getDynamicTimeComponents = () => {
 };
 
 const createBackupPath = () => {
-  const {date, year, month, day } = getDynamicTimeComponents();
+  const { date, year, month, day } = getDynamicTimeComponents();
   const paths = ["./backup", `./backup/${year}`, `./backup/${year}/${month}`, `./backup/${year}/${month}/RAOB`, `./backup/${year}/${month}/HIMA`, `./backup/${year}/${month}/HIMA/INA`, `./backup/${year}/${month}/HIMA/JATENG`];
   paths.forEach((path) => checkFolder(path));
 };
 
 const saveRaobFile = (utc) => {
   const { year, month, day } = getDynamicTimeComponents();
-  
+
   axios.get('http://172.19.2.99/monitoring_rason/status_rason/WAHL')
     .then(function (response) {
       const img = response.data.gambar.split(';base64,').pop();
       const buffer = Buffer.from(img, 'base64');
       createBackupPath();
-      const {year, month, day } = getDynamicTimeComponents();
+      const { year, month, day } = getDynamicTimeComponents();
       const fileSuffix = utc === 0 ? "00" : "12";
       const fileName = `./backup/${year}/${month}/RAOB/${day}_${month}_${year}_raob_${fileSuffix}UTC.png`;
       fs.writeFileSync(fileName, buffer);
@@ -53,7 +55,7 @@ const scheduleRaobJobs = () => {
   cron.schedule("30 14 * * *", () => saveRaobFile(12)); // 12 UTC
   cron.schedule("*/10 * * * *", () => {
     let randomText = Math.random().toString(36).substring(7);
-    const {date, year, month, day } = getDynamicTimeComponents();
+    const { date, year, month, day } = getDynamicTimeComponents();
     let minute = date.getMinutes();
     let hour = date.getHours();
     createBackupPath();
